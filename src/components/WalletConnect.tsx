@@ -1,16 +1,8 @@
-import { useEffect, useState } from 'react';
-import { useWeb3Modal } from '@web3modal/wagmi/react';
-import { useAccount, useDisconnect } from 'wagmi';
+
+import { useWallet } from '../hooks/useWallet';
 
 const WalletConnect = () => {
-  const { open } = useWeb3Modal();
-  const { address, isConnected } = useAccount();
-  const { disconnect } = useDisconnect();
-  const [isMounted, setIsMounted] = useState(false);
-
-  useEffect(() => setIsMounted(true), []);
-
-  if (!isMounted) return null;
+  const { address, isConnected, connectWallet, disconnectWallet } = useWallet();
 
   return (
     <div className="flex justify-center mb-4">
@@ -20,7 +12,7 @@ const WalletConnect = () => {
             Connected: {address?.slice(0, 6)}...{address?.slice(-4)}
           </span>
           <button
-            onClick={() => disconnect()}
+            onClick={disconnectWallet}
             className="bg-red-500 text-white px-4 py-2 rounded hover:bg-red-600 font-comic"
           >
             Disconnect
@@ -28,7 +20,7 @@ const WalletConnect = () => {
         </div>
       ) : (
         <button
-          onClick={() => open()}
+          onClick={connectWallet}
           className="bg-pepeGreen text-white px-4 py-2 rounded hover:bg-pepeDark font-comic"
         >
           Connect Wallet
